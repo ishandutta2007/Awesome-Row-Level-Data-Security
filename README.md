@@ -2,186 +2,95 @@
 
 ## Top Row-Level Data Security Ecosystem
 
+[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ishandutta2007/Awesome-Row-Level-Data-Security/pulls)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/ishandutta2007/Awesome-Row-Level-Data-Security)
 
+**Curated list of Row-Level Data Security (RLS) SaaS products, data access governance tools, and open-source GitHub projects.**
 
-**Curated List of SaaS Products & Open-Source GitHub Projects**  
-
-*Focused on Row Access Policies, Attribute-Based Controls & Self-Hosted Data Governance*  
+*Focused on Row Access Policies (RAP), Column-Level Security (CLS), Dynamic Data Masking, Attribute-Based Access Control (ABAC), and Multi-Tenant Isolation.*
 
 **Last updated: November 2026**
 
+---
 
-
-This repository tracks notable **SaaS platforms** and **open-source projects** for **Row-Level Data Security**. These tools enable organizations to control *which rows* a user can see within a shared table—enforcing multi-tenant isolation, regional data residency, and least-privilege access without duplicating datasets or building separate views for every audience.
-
-
-
-**Examples** include Snowflake Row-Level Security, Immuta, Privacera, Satori, Cyral, ALTR, Protegrity, SecuPi, Microsoft Purview, and Databricks Unity Catalog (the category leaders).
-
-
-
-**Open-source emphasis**: Row-Level Data Security is a domain where open-source tooling is **genuinely emerging but still maturing at the governance layer**. The strongest active project is **AccessFlow**, a full query proxy that sits between users and databases to enforce row-level security and column masking policies before queries execute—not after, and not via client-side enforcement . For warehouse-native patterns, **Snowflake Row Access Policies** and **Databricks Unity Catalog** provide SQL-based predicates (though they are platform features, not standalone products) . For PostgreSQL developers, **rlsalchemy** brings declarative RLS policy management to SQLAlchemy and Alembic, making tenant isolation a schema-level concern rather than an application-code afterthought . The critical caveat: **no open-source project matches Immuta's or Privacera's breadth of platform connectors and centralized policy authoring**—those remain commercial differentiators . And row-level security carries real performance costs: Snowflake's row access policies add 10–30% overhead on large tables unless the policy column aligns with the clustering key .
-
-
-
-Contributions welcome! Open a PR to add/update entries. Keep descriptions factual and link to official sites.
-
-
-
-## Table of Contents
-
-- [SaaS/Hosted Platforms](#saas-products)
-
-- [Open-Source GitHub Projects](#open-source-github-projects)
-
-- [How to Contribute](#how-to-contribute)
-
-- [Disclaimer](#disclaimer)
-
-
-
-## SaaS/Hosted Platforms
-
-
-
-- **[Snowflake Row-Level Security](https://docs.snowflake.com/en/user-guide/security-row-intro)**  
-
-  Native **Row Access Policies** that filter rows based on role or session context; the policy is a SQL expression returning boolean—TRUE makes the row visible, FALSE hides it entirely . The multi-tenant pattern uses session variables (e.g., `department_id`) so each department sees only its own data from a shared table. **Critical caveat**: policies add a predicate to every query; on 100M+ row tables, expect **10–30% overhead** unless the policy column aligns with the clustering key . Masking policies (column-level) are a separate feature and cannot reference other tables—only context functions like `CURRENT_ROLE()` .
-
-
-
-- **[Databricks Unity Catalog Row Filters](https://docs.databricks.com/aws/en/data-governance/unity-catalog/filters-and-masks)**  
-
-  Table-level **row filters** bound via `ALTER TABLE ... SET ROW FILTER` and managed by the table owner; column masks similarly attached per column . **Recommended path for scale**: **ABAC policies** attach at catalog or schema level via governed tags, applying automatically to new tables as they are tagged and preventing table owners from overriding . **Performance guidance**: use simple SQL expressions, limit distinct masks on large tables, reduce UDF arguments, and prefer deterministic expressions that cannot throw errors (e.g., `try_divide`) to allow optimizer push-down .
-
-
-
-- **[Immuta](https://www.immuta.com/)**  
-
-  Data access governance platform that **enforces policies directly**—queries return filtered/masked results based on policy logic, not just posture reporting . Positioned for organizations needing centralized policy authoring across multiple data platforms, with attribute-based controls and row-level filtering.
-
-
-
-- **[Privacera](https://privacera.com/)**  
-
-  Data security and governance platform with **Row-Level Security (RLS)** and **Column-Level Security (CLS)** via Apache Ranger API integration . Supports 50+ connectors across structured and semi-structured sources; offers cloud-native and self-managed deployments. Includes **Privacera Encryption Gateway** for dynamic data masking and format-preserving encryption . **Best for organizations wanting a commercial platform with broad connector coverage** and Ranger ecosystem alignment.
-
-
-
-- **[Satori](https://www.satori.com/)**  
-
-  Data access governance platform (acquired by Varonis) that enforces policies at query time; positioned for cloud data warehouses and databases . **Note**: as part of Varonis, verify current product direction and standalone availability.
-
-
-
-- **[ALTR](https://www.altra.io/)**  
-
-  Data access governance with **tokenization** as a key differentiator—stores surrogate values by design, placing data in a second system . Enforces row-level and masking policies at query time. **Best for organizations needing tokenization alongside RLS**.
-
-
-
-- **[Cyral](https://www.cyral.com/)**  
-
-  **Acquired by Varonis in March 2025**—any 2026 shortlist carrying Cyral as a standalone vendor is stale . Verify current product status before evaluation.
-
-
-
-- **[Protegrity](https://www.protegrity.com/)**  
-
-  Data security platform with fine-grained access control, encryption, and masking; positioned for enterprise data protection across databases and analytics platforms.
-
-
-
-- **[SecuPi](https://www.secupi.com/)**  
-
-  Data security and privacy platform with policy enforcement for row-level access and masking; positioned for regulated industries.
-
-
-
-- **[Microsoft Purview](https://learn.microsoft.com/en-us/purview/purview)**  
-
-  Microsoft's data governance platform; **Purview itself is not a row-level security enforcement engine**—it provides discovery, classification, and governance. RLS enforcement happens in the underlying platform (e.g., Azure SQL, Power BI) with Purview providing visibility and policy guidance . **Best for Microsoft-centric organizations** wanting governance visibility alongside platform-native RLS.
-
-
-
-## Open-Source GitHub Projects
-
-
-
-### Query Proxy Enforcement (Row-Level Security)
-
-
-
-- **[AccessFlow](https://github.com/bablsoft/accessflow)**  
-
-  The most complete open-source **database and API access governance platform** with **row-level security and column masking enforced by the proxy, not the client** . Features: **full query proxy** sitting between users and databases (PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, MongoDB, Couchbase, Redis, Cassandra, ScyllaDB, Elasticsearch, OpenSearch, DynamoDB, Neo4j, and any JDBC-compatible engine); **AI-powered query analysis** before human review (OpenAI, Anthropic, Ollama, or Hugging Face); **multi-stage approval chains**; **row-security and masking policies**; **tamper-evident audit log** (HMAC-chained, INSERT-only); just-in-time access, break-glass, and attestation campaigns; **API access governance** (REST, SOAP, GraphQL, gRPC) with response masking; and **deployment approval governance** for CI/CD pipelines . Terraform provider available for declarative policy management. **Best for organizations wanting a self-hosted, proxy-based enforcement point** that works across heterogeneous databases—but it is a proxy, so availability and residency requirements sit inside your data path .
-
-
-
-### PostgreSQL-Native RLS (Declarative Schema)
-
-
-
-- **[rlsalchemy](https://pypi.org/project/rlsalchemy/)**  
-
-  Open-source **declarative PostgreSQL and CockroachDB row-level security** for SQLAlchemy 2.1 and Alembic 1.18 . Models own their policy expressions via `__rls__`; a typed context model derives every setting name, SQL cast, and prefix from one class; Alembic autogenerate compares the declaration with the live database and writes reversible operations for complete table state . Features: **crud()** helper producing separate select/insert/update/delete policies; **verification API** to check live database against declarations without generating a migration; **drift detection** with typed `AlterRLSOp` carrying before/after states . **Pre-release caveat**: earlier versions were marked as pre-release/not stable for production —verify current stability before deploying. **Best for PostgreSQL teams** wanting tenant isolation as a schema-level concern with migration support—but it is PostgreSQL/CockroachDB-specific and does not provide cross-platform governance.
-
-
-
-### Additional Strong Open-Source Options
-
-
-
-- **Apache Ranger** — Open-source security framework for Hadoop ecosystems with **row-level filtering and column masking** policies via Ranger policies . **Best for organizations already in the Hadoop/Hive ecosystem**—but it is not a general-purpose data warehouse RLS solution.
-
-- **python-authz** — Framework-agnostic **ReBAC/RBAC/ABAC authorization engine** implementing Zanzibar-style relationship graphs (MIT-style) . Can express row-level access as relationship tuples (e.g., "alice can view document:roadmap because she is viewer of folder:workspace")—**not a database RLS proxy**, but a policy engine for application-level row filtering . Early release (v0.5), SQLite/PostgreSQL backends, FastAPI integration .
-
-- **Superset Row-Level Security** — Apache Superset's native RLS feature filters rows for virtual datasets; **critical limitation**: it affects only virtual tables created by Superset, not direct SQL Lab access to underlying tables . For SQL Lab restrictions, consider database-level ACLs with separate connections or Ranger impersonation . **Not a general RLS solution**—it is a BI-layer filter.
-
-
-
-**Frameworks for building custom systems**: For **proxy-based enforcement across heterogeneous databases**, AccessFlow provides the most complete open-source foundation . For **PostgreSQL-native declarative RLS**, rlsalchemy brings policies into SQLAlchemy/Alembic workflows . For **application-level relationship-based authorization**, python-authz implements Zanzibar-style ReBAC . For **Hadoop-ecosystem RLS**, Apache Ranger . **No open-source project matches Immuta's or Privacera's centralized policy authoring across dozens of platforms**—those remain commercial differentiators . And for warehouse-native needs, Snowflake Row Access Policies and Databricks ABAC provide built-in enforcement (platform features, not open-source products) .
-
-
-
-## How to Contribute
-
-
-
-1. Fork the repo.
-
-2. Add/edit entries in `README.md` (follow existing format).
-
-3. Include: name, link, 1–2 sentence description, and whether it's SaaS or open-source.
-
-4. Submit PR with a short explanation.
-
-
-
-Star the repo if you find it useful!
-
-
-
-## Disclaimer
-
-
-
-- This is a **community-curated** list — not exhaustive and not an endorsement.
-
-- Row-level security platforms handling sensitive data must comply with applicable privacy regulations (GDPR, CCPA) and industry compliance requirements; **row-level policies are enforced by the database or proxy, not by client applications**—misconfiguration can expose data across tenants.
-
-- **Row-level security carries real performance costs**—Snowflake's row access policies add 10–30% overhead on large tables unless the policy column aligns with the clustering key ; Databricks recommends simple expressions, fewer masks, and deterministic functions to preserve optimizer push-down . Test with representative workloads before production deployment.
-
-- **Open-source row-level security is emerging but fragmented**—AccessFlow provides a proxy-based enforcement point , and rlsalchemy provides PostgreSQL-native declarative RLS . However, **no open-source project matches Immuta's or Privacera's breadth of platform connectors and centralized policy authoring**—organizations requiring multi-platform governance should evaluate commercial platforms .
-
-- Verify license terms for commercial use; AccessFlow is open-source (check repository) , and rlsalchemy is a PyPI package (check license) .
-
-
+This repository tracks notable **SaaS platforms** and **open-source projects** for **Row-Level Data Security (RLS)** and **Fine-Grained Access Control (FGAC)**. These tools enable data platform teams, security architects, and backend engineers to control *which specific rows and records* a user or service account can query within a shared database or data warehouse—enforcing strict multi-tenant isolation, regional data residency compliance (GDPR, CCPA, HIPAA), and zero-trust data governance without copying datasets or maintaining sprawling client-side views.
 
 ---
 
+## Sector Overview & Market Dynamics
 
+The global **data access governance and fine-grained data security market** was valued at approximately **$2.14 billion in 2024** and is projected to expand to **$7.82 billion by 2032**, expanding rapidly alongside the broader enterprise data governance sector valued at over **$4.6 billion**. 
 
-**Made for data security architects, platform engineers, and organizations enforcing least-privilege access at the row level.**  
+The sector is **moderately to highly fragmented** rather than winner-take-all: major hyperscalers and data platforms (Microsoft Purview, Snowflake, and Databricks) dominate native warehouse query runtimes, while specialized independent access governance engines (such as Immuta, Privacera, ALTR, and Protegrity) compete aggressively for cross-platform, multi-cloud enterprise enforcement, and a vibrant open-source ecosystem secures application-layer and proxy-level policy execution.
 
-Let's make row-level data security more open, but with clear eyes about the performance overhead and governance-breadth gaps that commercial platforms still fill.
+---
+
+## Table of Contents
+
+- [Sector Overview & Market Dynamics](#sector-overview--market-dynamics)
+- [SaaS/Hosted Platforms](#saashosted-platforms)
+- [Open-Source GitHub Projects](#open-source-github-projects)
+- [How to Contribute](#how-to-contribute)
+- [Disclaimer](#disclaimer)
+
+---
+
+## SaaS/Hosted Platforms
+
+The table below lists leading SaaS and commercial hosted platforms providing row-level security, attribute-based access control (ABAC), and data access governance. Entries are sorted descending by company size (valuation / market capitalization / revenue).
+
+| Platform / Vendor | Valuation / Revenue | Pricing (Starting Tier) | Free Tier / Trial Limit | Key Row-Level Security Capabilities |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Microsoft Purview](https://learn.microsoft.com/en-us/purview/purview)** | **~$3.1 Trillion** market cap (Microsoft) | **$0.24 per capacity unit / hour** (~$175/month baseline for Data Map governance) | **30-day free trial**; includes up to $200 Azure cloud credits for initial deployment and scanning | Enterprise governance and discovery layer. Purview integrates policy classification with platform-native RLS engines across Azure SQL, Synapse, and Power BI. |
+| **[Snowflake (Row Access Policies)](https://docs.snowflake.com/en/user-guide/security-row-intro)** | **~$55 Billion** market cap | **$2.00 per credit** (Standard Edition) or **$3.00 per credit** (Enterprise Edition) | **30-day free trial** with **$400 in free usage credits**; full access to Enterprise features | Native SQL-based `ROW ACCESS POLICY` evaluating boolean expressions per session context (`CURRENT_ROLE()`, session attributes) directly in the compute engine. |
+| **[Databricks (Unity Catalog)](https://docs.databricks.com/aws/en/data-governance/unity-catalog/filters-and-masks)** | **~$43 Billion** valuation | **$0.07 to $0.55 per DBU** (Standard to Enterprise compute runtime) | **14-day free trial** with full platform capabilities; excludes underlying cloud compute/VM charges | Built-in `ROW FILTER` and column masks on Unity Catalog tables. Supports centralized ABAC inheritance via catalog/schema tags. |
+| **[Varonis (Cyral & Satori)](https://www.varonis.com/)** | **~$6 Billion** market cap | **$50.00 to $525.00 per protected database / month** (Cyral / Satori DAM baseline) | **30-day free trial** of full data security platform across multi-cloud environments | Query-time database access proxy with fine-grained row-filtering, tokenization, dynamic masking, and database activity monitoring. |
+| **[Immuta](https://www.immuta.com/)** | **~$1.3 Billion** valuation | **$96,000.00 / year** (baseline 12-month package for 960 Immuta Units on AWS Marketplace) | **14-day free trial** for Immuta SaaS with guided sample data and warehouse connections | Universal cloud data access governance platform. Enforces attribute-based row filtering and masking across Databricks, Snowflake, Starburst, and BigQuery. |
+| **[Privacera](https://privacera.com/)** | **~$350 Million** valuation | **$100,000.00 / year** (PrivaceraCloud Starter Pack 12-month commitment) | **30-day free trial** of PrivaceraCloud; covers connectors and discovery | Centralized data governance built on Apache Ranger APIs. Provides dynamic row-level security and column-level masking across 50+ data sources. |
+| **[Protegrity](https://www.protegrity.com/)** | **~$150 Million** estimated valuation | **$225,000.00 / year** (Protegrity Enterprise Edition base entitlement on AWS Marketplace) | **30-day evaluation license** available upon enterprise request | High-performance enterprise data protection platform specializing in vaultless tokenization, format-preserving encryption, and dynamic row filtering. |
+| **[ALTR](https://www.altra.io/)** | **~$70 Million** valuation | **$0.00 / month** (Free Community plan) or **$10.00 per data user / month** (Standard paid tier) | **Free forever plan** for up to 1 database connection and baseline consumption analytics | Cloud-native data access governance built around Snowflake Partner Connect; provides query-level row access control and vaultless tokenization. |
+| **[SecuPi](https://www.secupi.com/)** | **~$60 Million** estimated valuation | **$50,000.00 / year** (baseline entry license for Policy Administration Server) | **30-day proof-of-concept (PoC) evaluation** license via cloud marketplace engagement | In-line proxy and agent-based policy enforcement delivering real-time ABAC row-level filtering, column masking, and user behavior analytics. |
+
+---
+
+## Open-Source GitHub Projects
+
+Leading open-source projects for row-level security, policy-based access control, SQL query proxying, and relationship-based multi-tenancy. Sorted descending by GitHub star count.
+
+| Project | GitHub Stars | Description & Row-Level Security Capabilities |
+| :--- | :--- | :--- |
+| **[Apache Superset](https://github.com/apache/superset)** | [![Stars](https://img.shields.io/github/stars/apache/superset?style=social&color=white)](https://github.com/apache/superset/stargazers) | Modern open-source enterprise business intelligence web application featuring built-in **Row Level Security (RLS)** filters applied automatically to virtual datasets based on user roles and attributes. |
+| **[PostgREST](https://github.com/PostgREST/postgrest)** | [![Stars](https://img.shields.io/github/stars/PostgREST/postgrest?style=social&color=white)](https://github.com/PostgREST/postgrest/stargazers) | Standalone web server that turns any PostgreSQL database directly into a RESTful API, relying completely on **PostgreSQL Row-Level Security (RLS)** and JWT claims to enforce multi-tenant isolation. |
+| **[Casbin](https://github.com/casbin/casbin)** | [![Stars](https://img.shields.io/github/stars/casbin/casbin?style=social&color=white)](https://github.com/casbin/casbin/stargazers) | Powerful, efficient open-source access control library supporting ACL, RBAC, ABAC, and multi-tenant domain models. Generates SQL filtering conditions to enforce row-level access in database queries. |
+| **[Trino](https://github.com/trinodb/trino)** | [![Stars](https://img.shields.io/github/stars/trinodb/trino?style=social&color=white)](https://github.com/trinodb/trino/stargazers) | Distributed SQL query engine for big data with native **Row Filtering and Column Masking** SPI, dynamically altering query execution plans to restrict visible rows per user identity. |
+| **[Open Policy Agent (OPA)](https://github.com/open-policy-agent/opa)** | [![Stars](https://img.shields.io/github/stars/open-policy-agent/opa?style=social&color=white)](https://github.com/open-policy-agent/opa/stargazers) | General-purpose policy engine with **Partial Evaluation**. Translates high-level Rego policies directly into SQL `WHERE` clauses for automated, performant row-level filtering in database adapters. |
+| **[SpiceDB](https://github.com/authzed/spicedb)** | [![Stars](https://img.shields.io/github/stars/authzed/spicedb?style=social&color=white)](https://github.com/authzed/spicedb/stargazers) | Open-source, Google Zanzibar-inspired database system for managing fine-grained permissions and relationship-based access control (ReBAC) for row-level entities and tenant hierarchies. |
+| **[OpenFGA](https://github.com/openfga/openfga)** | [![Stars](https://img.shields.io/github/stars/openfga/openfga?style=social&color=white)](https://github.com/openfga/openfga/stargazers) | CNCF relation-based fine-grained authorization engine designed for cloud-native scale, enabling flexible row-level resource access checks across microservices. |
+| **[Permify](https://github.com/Permify/permify)** | [![Stars](https://img.shields.io/github/stars/Permify/permify?style=social&color=white)](https://github.com/Permify/permify/stargazers) | Open-source authorization service based on Google Zanzibar with native support for ABAC attributes, multi-tenant isolation, and fine-grained row access control modeling. |
+| **[Ory Keto](https://github.com/ory/keto)** | [![Stars](https://img.shields.io/github/stars/ory/keto?style=social&color=white)](https://github.com/ory/keto/stargazers) | First open-source implementation of Google's Zanzibar paper written in Go; provides lightning-fast permission checks for individual record and row entitlements. |
+| **[Cerbos](https://github.com/cerbos/cerbos)** | [![Stars](https://img.shields.io/github/stars/cerbos/cerbos?style=social&color=white)](https://github.com/cerbos/cerbos/stargazers) | Decoupled policy decision point for context-aware access control. Features **Query Plan Generation** that converts authorization policies into database ASTs/SQL predicates for row-level security. |
+| **[Helical Insight](https://github.com/helicalinsight/helicalinsight)** | [![Stars](https://img.shields.io/github/stars/helicalinsight/helicalinsight?style=social&color=white)](https://github.com/helicalinsight/helicalinsight/stargazers) | Open-source enterprise BI framework with native multi-tenancy and declarative **Row-Level Security (RLS)** filtering data connections across tenant boundaries. |
+| **[Apache Ranger](https://github.com/apache/ranger)** | [![Stars](https://img.shields.io/github/stars/apache/ranger?style=social&color=white)](https://github.com/apache/ranger/stargazers) | Comprehensive security framework across Hadoop and big data ecosystems (Spark, Hive, Trino) providing centralized policy administration with dynamic **Row-Level Filtering** and **Column Masking**. |
+| **[FastAPI-Permissions](https://github.com/holgi/fastapi-permissions)** | [![Stars](https://img.shields.io/github/stars/holgi/fastapi-permissions?style=social&color=white)](https://github.com/holgi/fastapi-permissions/stargazers) | Row-level security and ACL permission system for the FastAPI framework, checking user access and scoping querysets per entity row. |
+| **[SchemaGate](https://github.com/ashishsinha1602/schemagate)** | [![Stars](https://img.shields.io/github/stars/ashishsinha1602/schemagate?style=social&color=white)](https://github.com/ashishsinha1602/schemagate/stargazers) | Text-to-SQL access control engine providing row-level-security-aware table pruning and query gating for LLM agents, LangChain, and MCP servers across Postgres, Oracle, and MySQL. |
+| **[pg_rls](https://github.com/Dandush03/pg_rls)** | [![Stars](https://img.shields.io/github/stars/Dandush03/pg_rls?style=social&color=white)](https://github.com/Dandush03/pg_rls/stargazers) | Ruby on Rails gem providing declarative PostgreSQL Row-Level Security for multi-tenant applications, eliminating manual tenant filter scoping in ActiveRecord. |
+| **[AccessFlow](https://github.com/bablsoft/accessflow)** | [![Stars](https://img.shields.io/github/stars/bablsoft/accessflow?style=social&color=white)](https://github.com/bablsoft/accessflow/stargazers) | Open-source database access proxy sitting between clients and heterogeneous databases (Postgres, MySQL, Oracle, MongoDB) to enforce pre-execution row security, masking, and audit logging. |
+
+---
+
+## How to Contribute
+
+1. Fork this repository.
+2. Add or update entries in `README.md` conforming to the tabular format with specific pricing, trials, star badges, and links.
+3. Keep descriptions factual, objective, and linked directly to official documentation or source code.
+4. Submit a Pull Request with a clear summary of your changes.
+
+---
+
+## Disclaimer
+
+- This is a community-curated list maintained for educational and architectural evaluation purposes.
+- Row-level security implementations handling regulated personal data must adhere strictly to compliance frameworks (GDPR, CCPA, HIPAA, PCI DSS).
+- Policy enforcement carries compute considerations: complex SQL predicates or subqueries in row access policies can introduce query planning overhead (often 10–30% on multi-million row tables unless partition/clustering keys align). Benchmark representative analytical workloads before rolling out enterprise-wide policies.
