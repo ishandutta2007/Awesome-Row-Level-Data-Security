@@ -68,9 +68,9 @@ The table below lists leading SaaS and commercial hosted platforms providing row
 
 ## 💻 Open-Source GitHub Projects
 
-Leading open-source projects for row-level security, policy-based access control, SQL query proxying, and relationship-based multi-tenancy. Sorted descending by GitHub star count.
+Leading open-source projects for row-level security, policy-based access control, SQL query proxying, and relationship-based multi-tenancy. Sorted descending by GitHub Stars_Count.
 
-| Project 📦 | GitHub Stars ⭐ | Description & Row-Level Security Capabilities 🛠️ |
+| Project 📦 | GitHub_Stars ⭐ | Description & Row-Level Security Capabilities 🛠️ |
 | :--- | :--- | :--- |
 | **[Apache Superset](https://github.com/apache/superset)** | [![Stars](https://img.shields.io/github/stars/apache/superset?style=social&color=white)](https://github.com/apache/superset/stargazers) | Modern open-source enterprise business intelligence web application featuring built-in **Row Level Security (RLS)** filters applied automatically to virtual datasets based on user roles and attributes. |
 | **[PostgREST](https://github.com/PostgREST/postgrest)** | [![Stars](https://img.shields.io/github/stars/PostgREST/postgrest?style=social&color=white)](https://github.com/PostgREST/postgrest/stargazers) | Standalone web server that turns any PostgreSQL database directly into a RESTful API, relying completely on **PostgreSQL Row-Level Security (RLS)** and JWT claims to enforce multi-tenant isolation. |
@@ -96,7 +96,7 @@ Leading open-source projects for row-level security, policy-based access control
 Contributions are welcome! Please follow these guidelines:
 
 1. 🍴 Fork this repository.
-2. 📝 Add or update entries in `README.md` conforming to the tabular format with specific pricing, trials, star badges, and links.
+2. 📝 Add or update entries in `README.md` conforming to the tabular format with specific pricing, trials, Stars_Badges, and links.
 3. 🔍 Keep descriptions factual, objective, and linked directly to official documentation or source code.
 4. 🚀 Submit a Pull Request with a clear summary of your changes.
 
