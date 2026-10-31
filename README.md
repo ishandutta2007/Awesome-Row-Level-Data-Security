@@ -1,47 +1,58 @@
-# Awesome-Row-Level-Data-Security
+<div align="center">
 
-## Top Row-Level Data Security Ecosystem
+<img src="./assets/banner.svg" alt="Awesome Row-Level Data Security Banner" width="100%" />
 
-[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+# 🛡️ Awesome Row-Level Data Security 🔐
+
+### Curated List of SaaS Products & Open-Source Projects for Fine-Grained Access Control (FGAC)
+
+<a href="https://github.com/ishandutta2007/Awesome-Awesome-Awesome"><img src="https://img.shields.io/badge/Awesome-%E2%9C%94-blueviolet?style=flat-square&logo=github" alt="Awesome"/></a><a href="https://discord.gg/jc4xtF58Ve"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
+[![Awesome](https://awesome.re/badge.svg)](https://github.com/ishandutta2007/Awesome-Awesome-Awesome)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ishandutta2007/Awesome-Row-Level-Data-Security/pulls)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/ishandutta2007/Awesome-Row-Level-Data-Security)
-
-**Curated list of Row-Level Data Security (RLS) SaaS products, data access governance tools, and open-source GitHub projects.**
+<a href="https://github.com/ishandutta2007"><img alt="GitHub followers" src="https://img.shields.io/github/followers/ishandutta2007?label=Follow" /></a>
 
 *Focused on Row Access Policies (RAP), Column-Level Security (CLS), Dynamic Data Masking, Attribute-Based Access Control (ABAC), and Multi-Tenant Isolation.*
 
 **Last updated: November 2026**
 
----
-
-This repository tracks notable **SaaS platforms** and **open-source projects** for **Row-Level Data Security (RLS)** and **Fine-Grained Access Control (FGAC)**. These tools enable data platform teams, security architects, and backend engineers to control *which specific rows and records* a user or service account can query within a shared database or data warehouse—enforcing strict multi-tenant isolation, regional data residency compliance (GDPR, CCPA, HIPAA), and zero-trust data governance without copying datasets or maintaining sprawling client-side views.
+</div>
 
 ---
 
-## Sector Overview & Market Dynamics
+## 📖 Introduction
 
-The global **data access governance and fine-grained data security market** was valued at approximately **$2.14 billion in 2024** and is projected to expand to **$7.82 billion by 2032**, expanding rapidly alongside the broader enterprise data governance sector valued at over **$4.6 billion**. 
+This repository tracks notable **SaaS platforms** ☁️ and **open-source projects** 💻 for **Row-Level Data Security (RLS)** and **Fine-Grained Access Control (FGAC)**. These tools enable data platform teams, security architects, and backend engineers to control *which specific rows and records* a user or service account can query within a shared database or data warehouse—enforcing strict multi-tenant isolation, regional data residency compliance (GDPR, CCPA, HIPAA), and zero-trust data governance without copying datasets or maintaining sprawling client-side views.
+
+---
+
+## 📈 Sector Overview & Market Dynamics
+
+The global **data access governance and fine-grained data security market** was valued at approximately **$2.14 billion in 2024** and is projected to expand to **$7.82 billion by 2032** 🚀, expanding rapidly alongside the broader enterprise data governance sector valued at over **$4.6 billion**. 
 
 The sector is **moderately to highly fragmented** rather than winner-take-all: major hyperscalers and data platforms (Microsoft Purview, Snowflake, and Databricks) dominate native warehouse query runtimes, while specialized independent access governance engines (such as Immuta, Privacera, ALTR, and Protegrity) compete aggressively for cross-platform, multi-cloud enterprise enforcement, and a vibrant open-source ecosystem secures application-layer and proxy-level policy execution.
 
 ---
 
-## Table of Contents
+## 📑 Table of Contents
 
-- [Sector Overview & Market Dynamics](#sector-overview--market-dynamics)
-- [SaaS/Hosted Platforms](#saashosted-platforms)
-- [Open-Source GitHub Projects](#open-source-github-projects)
-- [How to Contribute](#how-to-contribute)
-- [Disclaimer](#disclaimer)
+- [📖 Introduction](#-introduction)
+- [📈 Sector Overview & Market Dynamics](#-sector-overview--market-dynamics)
+- [☁️ SaaS/Hosted Platforms](#️-saashosted-platforms)
+- [💻 Open-Source GitHub Projects](#-open-source-github-projects)
+- [🤝 How to Contribute](#-how-to-contribute)
+- [⭐ Star History](#-star-history)
+- [💖 Support](#-support)
+- [⚠️ Disclaimer](#️-disclaimer)
 
 ---
 
-## SaaS/Hosted Platforms
+## ☁️ SaaS/Hosted Platforms
 
 The table below lists leading SaaS and commercial hosted platforms providing row-level security, attribute-based access control (ABAC), and data access governance. Entries are sorted descending by company size (valuation / market capitalization / revenue).
 
-| Platform / Vendor | Valuation / Revenue | Pricing (Starting Tier) | Free Tier / Trial Limit | Key Row-Level Security Capabilities |
+| Platform / Vendor | Valuation / Revenue 🏢 | Pricing (Starting Tier) 💵 | Free Tier / Trial Limit 🎁 | Key Row-Level Security Capabilities 🔑 |
 | :--- | :--- | :--- | :--- | :--- |
 | **[Microsoft Purview](https://learn.microsoft.com/en-us/purview/purview)** | **~$3.1 Trillion** market cap (Microsoft) | **$0.24 per capacity unit / hour** (~$175/month baseline for Data Map governance) | **30-day free trial**; includes up to $200 Azure cloud credits for initial deployment and scanning | Enterprise governance and discovery layer. Purview integrates policy classification with platform-native RLS engines across Azure SQL, Synapse, and Power BI. |
 | **[Snowflake (Row Access Policies)](https://docs.snowflake.com/en/user-guide/security-row-intro)** | **~$55 Billion** market cap | **$2.00 per credit** (Standard Edition) or **$3.00 per credit** (Enterprise Edition) | **30-day free trial** with **$400 in free usage credits**; full access to Enterprise features | Native SQL-based `ROW ACCESS POLICY` evaluating boolean expressions per session context (`CURRENT_ROLE()`, session attributes) directly in the compute engine. |
@@ -55,11 +66,11 @@ The table below lists leading SaaS and commercial hosted platforms providing row
 
 ---
 
-## Open-Source GitHub Projects
+## 💻 Open-Source GitHub Projects
 
 Leading open-source projects for row-level security, policy-based access control, SQL query proxying, and relationship-based multi-tenancy. Sorted descending by GitHub star count.
 
-| Project | GitHub Stars | Description & Row-Level Security Capabilities |
+| Project 📦 | GitHub Stars ⭐ | Description & Row-Level Security Capabilities 🛠️ |
 | :--- | :--- | :--- |
 | **[Apache Superset](https://github.com/apache/superset)** | [![Stars](https://img.shields.io/github/stars/apache/superset?style=social&color=white)](https://github.com/apache/superset/stargazers) | Modern open-source enterprise business intelligence web application featuring built-in **Row Level Security (RLS)** filters applied automatically to virtual datasets based on user roles and attributes. |
 | **[PostgREST](https://github.com/PostgREST/postgrest)** | [![Stars](https://img.shields.io/github/stars/PostgREST/postgrest?style=social&color=white)](https://github.com/PostgREST/postgrest/stargazers) | Standalone web server that turns any PostgreSQL database directly into a RESTful API, relying completely on **PostgreSQL Row-Level Security (RLS)** and JWT claims to enforce multi-tenant isolation. |
@@ -80,16 +91,37 @@ Leading open-source projects for row-level security, policy-based access control
 
 ---
 
-## How to Contribute
+## 🤝 How to Contribute
 
-1. Fork this repository.
-2. Add or update entries in `README.md` conforming to the tabular format with specific pricing, trials, star badges, and links.
-3. Keep descriptions factual, objective, and linked directly to official documentation or source code.
-4. Submit a Pull Request with a clear summary of your changes.
+Contributions are welcome! Please follow these guidelines:
+
+1. 🍴 Fork this repository.
+2. 📝 Add or update entries in `README.md` conforming to the tabular format with specific pricing, trials, star badges, and links.
+3. 🔍 Keep descriptions factual, objective, and linked directly to official documentation or source code.
+4. 🚀 Submit a Pull Request with a clear summary of your changes.
 
 ---
 
-## Disclaimer
+## ⭐ Star History
+
+[![Star History Chart](https://star-history.dera.page/svg?repos=ishandutta2007/Awesome-Row-Level-Data-Security&type=date&legend=top-left)](https://star-history.dera.page/#ishandutta2007/Awesome-Row-Level-Data-Security&type=date&legend=top-left)
+
+---
+
+## 💖 Support
+
+Thank you for exploring this curated guide to Row-Level Data Security! If you found this repository helpful, please consider:
+
+- ⭐ **Starring** the repository on GitHub
+- 🍴 **Forking** it to keep a copy or contribute improvements
+- 📢 **Sharing** it with colleagues, platform engineers, and security teams
+- ☕ **Buying a coffee / Sponsoring** the maintainer via the [GitHub Sponsor Dashboard](https://github.com/sponsors/ishandutta2007)
+
+Your support keeps open-source research and community documentation thriving! ✨
+
+---
+
+## ⚠️ Disclaimer
 
 - This is a community-curated list maintained for educational and architectural evaluation purposes.
 - Row-level security implementations handling regulated personal data must adhere strictly to compliance frameworks (GDPR, CCPA, HIPAA, PCI DSS).
